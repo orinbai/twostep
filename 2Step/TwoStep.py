@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 
 class TwoStep:
     def __init__(self, filename, preClass=False, sep='\t', header=True, ignorList=False):
@@ -20,6 +19,12 @@ class TwoStep:
         ### Phase 1 ###
         self.findBase()
         self.nom2val = dict(zip(self.mxOrder.keys(), [0]*len(self.mxOrder.keys())))
+
+        ############################################################################
+        ##                                                                        ##
+        ## Phase 1 is End, and self.CCmatrix is The Simliar Matrix of Nominal Var ##
+        ##                                                                        ##
+        ############################################################################
 
         ### Phase 2, update matrix with new numerical var ###
         nominal_useless = []
@@ -128,20 +133,10 @@ class TwoStep:
             tmpval = map(lambda x: list(self.matrix[:, i]).count(x), np.unique(self.matrix[:, i]))
             for n in range(len(tmpatt)):
                 self.CCmatrix[self.mxOrder[tmpatt[n]], self.mxOrder[tmpatt[n]]] = float(tmpval[n])
-#                print tmpatt[n], self.mxOrder[tmpatt[n]], self.mxOrder[tmpatt[n]], tmpval[n]
-#            print map(lambda x: list(self.matrix[:, i]).count(x), np.unique(self.matrix[:, i]))
-#            print '-'*30
-#        print ','.join(self.diag.keys())
-#        print ','.join(self.diag.values())
 
         for tkey in self.CCHash:
             tkeys = tkey.split('\t')
             self.CCmatrix[self.mxOrder[tkeys[0]], self.mxOrder[tkeys[1]]] = self.CCHash[tkey]
-        ############################################################################
-        ##                                                                        ##
-        ## Phase 1 is End, and self.CCmatrix is The Simliar Matrix of Nominal Var ##
-        ##                                                                        ##
-        ############################################################################
 
     def _similarCOEF(self, nomVar1, nomVar2):
         ## D(a,c) = M(a, c) /(M(a) + M(c) - M(a,c)) ##
@@ -162,15 +157,3 @@ class TwoStep:
             m += np.var(self.matrixNum[self.baseGroup[i], cIndice])*len(self.baseGroup[i])
 
         return [cIndice, m]
-
-
-
-
-        
-
-
-        
-
-    
-
-
