@@ -1,7 +1,7 @@
 import numpy as np
 
 class TwoStep:
-    def __init__(self, filename, preClass=False, sep='\t', header=True, ignorList=False):
+    def __init__(self, filename, preClass=False, sep='\t', header=True, ignorList=[]):
         self.pClass = preClass
         self.ig = ignorList
         self.sep = sep
